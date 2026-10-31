@@ -56,14 +56,6 @@ body::before {
     url('/img/bg-sky.webp') center top / cover no-repeat;
 }
 
-@media (max-width: 700px) {
-  body::before {
-    background-image:
-      linear-gradient(180deg, rgba(7, 13, 38, 0) 35%, rgba(7, 13, 38, 0.28) 70%, rgba(7, 13, 38, 0.5) 100%),
-      url('/img/bg-sky-sm.webp');
-  }
-}
-
 button,
 input,
 select {

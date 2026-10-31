@@ -1,0 +1,201 @@
+.team-sheet {
+  width: min(560px, calc(100% - 32px));
+  max-height: min(80vh, 760px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--ink);
+  box-shadow: 0 24px 80px rgba(7, 13, 38, 0.5);
+  overflow: hidden;
+}
+
+.team-sheet[open] {
+  display: flex;
+  flex-direction: column;
+  animation: sheet-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.team-sheet::backdrop {
+  background: rgba(7, 13, 38, 0.55);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+}
+
+html:has(.team-sheet[open]) {
+  overflow: hidden;
+}
+
+.team-sheet-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 22px 22px 8px;
+  border-radius: inherit;
+  /* Safari는 dialog 안의 backdrop-filter가 뒤 화면을 흐리게 하지 못해 내용이 겹쳐 보인다.
+     창은 거의 불투명하게 두고, 흐림은 ::backdrop에서 처리한다. */
+  --lg-tint: rgba(16, 26, 64, 0.96);
+}
+
+.team-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.team-sheet-head h2 {
+  margin: 0;
+  outline: none;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.team-sheet.team-1 .team-sheet-head h2 { color: #a8e0ff; }
+.team-sheet.team-2 .team-sheet-head h2 { color: #d6c6ff; }
+
+.team-sheet-close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+}
+
+.team-sheet-close:focus {
+  outline: none;
+}
+
+.team-sheet-close:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 2px;
+}
+
+.team-sheet-close svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.team-sheet-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 16px 0 6px;
+}
+
+.team-sheet-summary div {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.team-sheet-summary dt {
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+
+.team-sheet-summary dd {
+  margin: 2px 0 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.team-sheet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 14px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.team-sheet-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 4px;
+  border-top: 1px solid var(--line);
+}
+
+.team-sheet-list li:first-child {
+  border-top: 0;
+}
+
+.ts-name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.ts-nums {
+  display: flex;
+  gap: 10px;
+  min-width: 96px;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+.ts-nums b {
+  margin-right: 1px;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.team-sheet-empty {
+  margin: 28px 0;
+  text-align: center;
+}
+
+@keyframes sheet-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+}
+
+/* 모바일: 아래에서 올라오는 시트 */
+@media (max-width: 600px) {
+  .team-sheet {
+    width: 100%;
+    max-width: 100%;
+    max-height: 85vh;
+    margin: auto 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .team-sheet[open] {
+    animation-name: sheet-up;
+  }
+
+  .team-sheet-body {
+    padding: 18px 16px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .team-sheet-list li {
+    grid-template-columns: 1fr auto;
+    row-gap: 6px;
+  }
+
+  .team-sheet-list .pips {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-sheet[open] { animation: none; }
+}

@@ -1,0 +1,119 @@
+.team-panel {
+  padding: 22px;
+}
+
+.team-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.team-head h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.team-panel.team-1 .team-head h2 { color: #a8e0ff; }
+.team-panel.team-2 .team-head h2 { color: #d6c6ff; }
+
+.team-score b {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  line-height: 1;
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+}
+
+.team-score span {
+  margin-left: 2px;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.team-panel {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.team-panel:hover {
+  transform: translateY(-3px);
+}
+
+.team-panel:active {
+  transform: translateY(-1px) scale(0.995);
+}
+
+.team-panel:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.team-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+}
+
+.team-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 700;
+  color: var(--gold-soft);
+  white-space: nowrap;
+}
+
+.team-more svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s;
+}
+
+.team-panel:hover .team-more svg {
+  transform: translateX(3px);
+}
+
+.pips {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.pips i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.pips i.on {
+  background: linear-gradient(135deg, #fff1c4, var(--gold));
+  box-shadow: 0 0 5px rgba(230, 191, 92, 0.7);
+}
+
+.pips em {
+  margin-left: 3px;
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold-soft);
+}
+
+@media (max-width: 420px) {
+  .team-panel { padding: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-panel,
+  .team-panel:hover { transition: none; transform: none; }
+}

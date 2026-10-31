@@ -1,0 +1,192 @@
+.achievers {
+  padding: 22px 0 8px;
+}
+
+.achievers-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: var(--ink-inv);
+  text-shadow: 0 1px 8px rgba(7, 13, 38, 0.7);
+}
+
+.achievers-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.achievers-title svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--gold);
+  filter: drop-shadow(0 0 6px rgba(230, 191, 92, 0.8));
+}
+
+.achievers-count {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.achievers-stage {
+  display: grid;
+}
+
+/* 카드는 같은 자리에 겹쳐 두고 활성 카드만 보인다 */
+.achiever-slide {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(6px) scale(0.985);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+.achiever-slide.is-active {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.achiever-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 96px;
+  padding: 18px 24px;
+  /* glass 위에 금빛 반사 */
+  background:
+    radial-gradient(70% 140% at 0% 0%, rgba(251, 238, 196, 0.22), transparent 60%),
+    radial-gradient(120% 60% at 15% 0%, rgba(255, 255, 255, 0.14), transparent 55%),
+    var(--lg-tint);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 0 24px rgba(251, 238, 196, 0.06),
+    0 0 32px rgba(230, 191, 92, 0.18),
+    var(--shadow);
+}
+
+.achiever-empty {
+  justify-content: center;
+  color: var(--ink-2);
+  font-weight: 600;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), var(--shadow);
+}
+
+.achiever-medal {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  padding-top: 8px;
+  background: url('/img/medal.webp') center / contain no-repeat;
+  color: var(--gold-soft);
+  font-size: 1.45rem;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(230, 191, 92, 0.9), 0 1px 2px rgba(7, 13, 38, 0.6);
+}
+
+.achiever-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.achiever-name {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.achiever-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 0.82rem;
+}
+
+.achiever-stats {
+  display: flex;
+  gap: 18px;
+}
+
+.achiever-stats div {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.achiever-stats b {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  line-height: 1;
+  color: var(--gold-soft);
+  text-shadow: 0 0 14px rgba(230, 191, 92, 0.5);
+}
+
+.achiever-stats span {
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+.achievers-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.achievers-dots button {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  cursor: pointer;
+  transition: width 0.3s, background 0.3s;
+}
+
+.achievers-dots button.is-active {
+  width: 32px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* 활성 인디케이터가 차오르는 동안 현재 카드를 보여주고, 다 차면 다음 카드로 넘어간다 */
+.achievers-dots button.is-active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gold);
+  transform-origin: left center;
+  animation: indicator-fill var(--rotate-ms, 4000ms) linear forwards;
+}
+
+.achievers:hover .achievers-dots button.is-active::after {
+  animation-play-state: paused;
+}
+
+@keyframes indicator-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (max-width: 560px) {
+  .achiever-card { gap: 12px; padding: 14px 16px; }
+  .achiever-medal { width: 58px; height: 58px; padding-top: 6px; font-size: 1.15rem; }
+  .achiever-name { font-size: 1.15rem; }
+  .achiever-stats { gap: 10px; }
+  .achiever-stats b { font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achiever-slide { transition: none; }
+}

@@ -143,9 +143,21 @@ function useVideoGrowth(ref: RefObject<HTMLVideoElement | null>, score: number, 
   useEffect(() => {
     const v = ref.current
     if (!v || !enabled) return
+    // iOS Safari는 재생 전엔 프레임을 불러오지 않아 currentTime만 바꾸면 빈 화면이 된다.
+    // 프레임 데이터가 없으면 무음 재생을 잠깐 걸어 프레임을 받은 뒤 원하는 위치로 이동한다.
     const onMeta = () => {
-      v.currentTime = toVideoTime(startScore, v.duration)
-      setReady(true)
+      const finish = () => {
+        v.currentTime = toVideoTime(startScore, v.duration)
+        setReady(true)
+      }
+      if (v.readyState >= 2) return finish()
+      v.play().then(
+        () => {
+          v.pause()
+          finish()
+        },
+        finish, // 저전력 모드 등 자동재생 불가: 그대로 이동 (#t 프래그먼트로 프레임은 받아둠)
+      )
     }
     if (v.readyState >= 1) onMeta()
     else v.addEventListener('loadedmetadata', onMeta, { once: true })
@@ -234,7 +246,7 @@ export default function GrowthTree({ team, score }: { team: Team; score: number 
         <video
           ref={videoRef}
           className="growth-tree-video"
-          src={videoSrc}
+          src={`${videoSrc}#t=0.001`}
           muted
           playsInline
           preload="auto"

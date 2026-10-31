@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
-import { loginEmail, supabase } from '../lib/supabase'
+import { authPassword, loginEmail, supabase } from '../lib/supabase'
 import type { Member } from '../lib/types'
 
 interface AuthState {
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .in('role', ['lead', 'admin'])
       .maybeSingle()
     if (!member) return '등록되지 않은 계정입니다.'
-    const { error } = await supabase.auth.signInWithPassword({ email: loginEmail(member.id), password })
+    const { error } = await supabase.auth.signInWithPassword({ email: loginEmail(member.id), password: authPassword(password) })
     if (error) return '비밀번호가 올바르지 않거나 아직 비밀번호를 설정하지 않은 계정입니다.'
     return null
   }

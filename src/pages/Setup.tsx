@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAccountNames, useAuth } from '../hooks/useAuth'
-import { supabase } from '../lib/supabase'
+import { PASSWORD_MAX, PASSWORD_MIN, supabase } from '../lib/supabase'
 import './Auth.css'
 
 export default function Setup() {
@@ -17,7 +17,8 @@ export default function Setup() {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault()
-    if (password.length < 10) return setError('비밀번호는 10자 이상이어야 합니다.')
+    if (password.length < PASSWORD_MIN || password.length > PASSWORD_MAX)
+      return setError(`비밀번호는 ${PASSWORD_MIN}~${PASSWORD_MAX}자로 입력해 주세요.`)
     if (password !== confirm) return setError('비밀번호가 서로 다릅니다.')
     setBusy(true)
     setError(null)
@@ -74,12 +75,12 @@ export default function Setup() {
           />
         </label>
         <label className="field">
-          새 비밀번호 (10자 이상)
-          <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required />
+          새 비밀번호 ({PASSWORD_MIN}~{PASSWORD_MAX}자)
+          <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" maxLength={PASSWORD_MAX} required />
         </label>
         <label className="field">
           비밀번호 확인
-          <input className="input" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" required />
+          <input className="input" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" maxLength={PASSWORD_MAX} required />
         </label>
         {error && <p className="error-text">{error}</p>}
         <button className="btn btn-primary" disabled={busy || !name || !code || !password}>

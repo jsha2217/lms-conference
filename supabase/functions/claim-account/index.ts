@@ -10,6 +10,8 @@ const cors = {
 
 // src/lib/supabase.ts 의 loginEmail 과 동일해야 함
 const loginEmail = (memberId: string) => `m-${memberId}@accounts.lms-conference.dev`
+// src/lib/supabase.ts 의 authPassword 와 동일해야 함 (Supabase Auth 최소 6자 대응)
+const authPassword = (password: string) => (password.length < 6 ? `${password}#lms-pad` : password)
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } })
@@ -26,7 +28,7 @@ Deno.serve(async (req) => {
   }
   const { name, code, password } = body
   if (!name || !code || !password) return json({ error: '이름, 초대코드, 비밀번호를 모두 입력해 주세요.' }, 400)
-  if (password.length < 10) return json({ error: '비밀번호는 10자 이상이어야 합니다.' }, 400)
+  if (password.length < 4 || password.length > 30) return json({ error: '비밀번호는 4~30자로 입력해 주세요.' }, 400)
 
   const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -38,12 +40,12 @@ Deno.serve(async (req) => {
   if (!match) return json({ error: '이름 또는 초대코드가 올바르지 않거나 이미 사용된 코드입니다.' }, 400)
 
   if (match.user_id) {
-    const { error: updErr } = await admin.auth.admin.updateUserById(match.user_id, { password })
+    const { error: updErr } = await admin.auth.admin.updateUserById(match.user_id, { password: authPassword(password) })
     if (updErr) return json({ error: updErr.message }, 400)
   } else {
     const { data: created, error: createErr } = await admin.auth.admin.createUser({
       email: loginEmail(match.member_id),
-      password,
+      password: authPassword(password),
       email_confirm: true,
     })
     if (createErr) return json({ error: createErr.message }, 400)
